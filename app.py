@@ -18,7 +18,7 @@ def load_pdfs():
     faiss_index_path = os.path.join(os.path.dirname(__file__), "faiss_index")
 
     if os.path.exists(faiss_index_path):
-        shutil.rmtree(faiss_index_path)
+        return
 
     pdfs = [f for f in os.listdir(PDF_PATH) if os.path.isfile(os.path.join(PDF_PATH, f))]
 
@@ -74,16 +74,17 @@ def user_input(user_question):
     st.write("Reply: ", response["output_text"])
 
 def main():
-    parser = argparse.ArgumentParser(description='Optional app description')
-    parser.add_argument('-b', '--build', action='store_true')
-    args = parser.parse_args()
-    if args.build:
-        load_pdfs()
+    load_pdfs()
 
     st.set_page_config("TDX Doctor")
     st.header("Please ask questions related to TDX or UEFI")
+    st.markdown("Ask a question like following styles:")
+    st.markdown("- please describe EFI PEI Core in 200 words.")
+    st.markdown("- please describe intel tdx in 200 words.")
+    st.markdown("- please explain SEAMCALL in 200 words.")
 
-    user_question = st.text_input("Ask a Question like 'please describe xxx in 400 words'")
+
+    user_question = st.text_input("input", label_visibility="hidden")
     if user_question:
         user_input(user_question)
 
